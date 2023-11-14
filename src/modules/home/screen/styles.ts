@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  logo: { marginBottom: 32 },
+  logo: { margin: 16 },
 
   inputsWrapper: { gap: 24 },
 

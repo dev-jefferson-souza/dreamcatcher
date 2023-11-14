@@ -1,6 +1,7 @@
 import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
-import { FlatList, Text, View } from "react-native";
+import React, { useState } from "react";
+import { FlatList, StatusBar, Text, View } from "react-native";
+import Toast from "react-native-root-toast";
 import { Button } from "../../../components/button";
 import { Card } from "../../../components/card";
 import { DreamCard } from "../../../components/dreamCard";
@@ -8,50 +9,31 @@ import { Input } from "../../../components/input";
 import { IDream } from "../../../models/dream";
 import { styles } from "./styles";
 
+interface ICleanStates<T = string>
+  extends Array<React.Dispatch<React.SetStateAction<T>>> {}
+
 export const Home = () => {
-  const [title, setTitle] = useState<string>();
-  const [description, setDescription] = useState<string>();
-  const dreamArray: IDream[] = [
-    {
-      id: "1",
-      title: "Flying on Cloud Nine",
-      description:
-        "Soaring through the skies on fluffy clouds and feeling the wind beneath my wings.",
-      favorite: true,
-    },
-    {
-      id: "2",
-      title: "Underwater Adventure",
-      description:
-        "Exploring the depths of the ocean, encountering colorful fish and mysterious sea creatures.",
-      favorite: false,
-    },
-    {
-      id: "3",
-      title: "Space Odyssey",
-      description:
-        "Embarking on a journey to the stars, visiting distant planets and galaxies.",
-      favorite: false,
-    },
-    {
-      id: "4",
-      title: "Time Traveler's Tale",
-      description:
-        "Traveling through time, witnessing historical events and experiencing different eras.",
-      favorite: true,
-    },
-    {
-      id: "5",
-      title: "Time Traveler's Tale Time Traveler's Tale Time Traveler's Tale",
-      description:
-        "Traveling through time, witnessing historical events and experiencing different eras.",
-      favorite: true,
-    },
-  ];
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [dreams, setDreams] = useState<Array<IDream>>([]);
 
   function createDream() {
-    const dream = { title, description };
-    console.log(dream);
+    const id = Math.floor(Math.random() * 1000).toString();
+    const dream: IDream = { title, description, id, favorite: false };
+
+    if (title.length === 0 || description.length === 0) {
+      return Toast.show("Preencha todos os campos.", {
+        position: StatusBar.currentHeight,
+        backgroundColor: "#0d1117",
+      });
+    }
+
+    setDreams([dream, ...dreams]);
+    cleanStates([setTitle, setDescription]);
+  }
+
+  function cleanStates(states: ICleanStates<string>) {
+    states.forEach((state) => state(""));
   }
 
   return (
@@ -91,7 +73,7 @@ export const Home = () => {
       </Card>
 
       <FlatList
-        data={dreamArray}
+        data={dreams}
         renderItem={({ item }) => <DreamCard dream={item} />}
       />
     </View>

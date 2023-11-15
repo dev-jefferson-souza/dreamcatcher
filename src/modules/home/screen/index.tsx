@@ -5,6 +5,7 @@ import Toast from "react-native-root-toast";
 import { Button } from "../../../components/button";
 import { Card } from "../../../components/card";
 import { DreamCard } from "../../../components/dreamCard";
+import { EmptyMessage } from "../../../components/emptyMessage";
 import { Input } from "../../../components/input";
 import { IDream } from "../../../models/dream";
 import { styles } from "./styles";
@@ -34,6 +35,19 @@ export const Home = () => {
 
   function cleanStates(states: ICleanStates<string>) {
     states.forEach((state) => state(""));
+  }
+
+  function isDreamsEmpty() {
+    if (dreams.length > 0) {
+      return (
+        <FlatList
+          data={dreams}
+          renderItem={({ item }) => <DreamCard dream={item} />}
+        />
+      );
+    } else {
+      return <EmptyMessage />;
+    }
   }
 
   return (
@@ -71,11 +85,7 @@ export const Home = () => {
           </Button>
         </View>
       </Card>
-
-      <FlatList
-        data={dreams}
-        renderItem={({ item }) => <DreamCard dream={item} />}
-      />
+      {isDreamsEmpty()}
     </View>
   );
 };

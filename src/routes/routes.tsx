@@ -1,53 +1,34 @@
-import { Feather, FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import { Favorties } from "../modules/favorites/screen";
+import React from "react";
+import { CustomTabBar, CustomTabBarProps } from "../components/customTabBar";
+import { Favorites } from "../modules/favorites/screen";
 import { Home } from "../modules/home/screen";
-
-interface ITabBarIcon {
-  focused: boolean;
-  color: string;
-  size: number;
-}
 
 const Tab = createBottomTabNavigator();
 
-export const Routes = () => {
+function TabBar(props: Readonly<CustomTabBarProps>) {
+  return <CustomTabBar {...props} />;
+}
+
+export const Routes: React.FC = () => {
   return (
     <NavigationContainer>
-      <Tab.Navigator screenOptions={screenOptions}>
-        <Tab.Screen name="Home" component={Home} options={homeTabOptions} />
-        <Tab.Screen
-          name="Favorites"
-          component={Favorties}
-          options={favTabOptions}
-        />
+      <Tab.Navigator
+        screenOptions={screenOptions}
+        tabBar={(props) => TabBar(props)}
+      >
+        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Favorites" component={Favorites} />
       </Tab.Navigator>
     </NavigationContainer>
   );
 };
 
 const screenOptions = {
+  tabBarHideOnKeyboard: true,
   headerShown: false,
-  tabBarActiveTintColor: "#8957e5",
-  tabBarInactiveBackgroundColor: "#0d1117",
-  tabBarActiveBackgroundColor: "#0d1117",
-  tabBarInactiveTintColor: "#68707b",
-  tabBarStyle: { height: 60, borderTopWidth: 0 },
-  style: {
-    elevation: 0,
-    shadowOffset: { width: 0, height: 0 },
-  },
+  keyboardHidesTabBar: true,
 };
 
-const homeTabOptions = {
-  tabBarIcon: ({ color }: ITabBarIcon) => (
-    <Feather name="home" size={22} color={color} />
-  ),
-};
-
-const favTabOptions = {
-  tabBarIcon: ({ color }: ITabBarIcon) => (
-    <FontAwesome name="star" size={22} color={color} />
-  ),
-};
+export default Routes;

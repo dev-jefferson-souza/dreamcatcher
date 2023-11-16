@@ -1,16 +1,29 @@
 import { FontAwesome } from "@expo/vector-icons";
-import { Text, TouchableOpacity, View } from "react-native";
+import {
+  Text,
+  TouchableOpacity,
+  TouchableOpacityProps,
+  View,
+} from "react-native";
 import { IDream } from "../../models/dream";
 import { styles } from "./styles";
 
-interface Props {
+interface Props extends TouchableOpacityProps {
   dream: IDream;
+  onPressFavorite: (id: string) => void;
 }
 
-export const DreamCard = ({ dream }: Props) => {
+export const DreamCard = ({ dream, onPressFavorite }: Props) => {
   function handleStarIcon() {
     const icon = dream.favorite ? "star" : "star-o";
-    return <FontAwesome name={icon} size={24} color="#fff" />;
+    return (
+      <FontAwesome
+        onPress={() => onPressFavorite(dream.id)}
+        name={icon}
+        size={32}
+        color="#fff"
+      />
+    );
   }
 
   return (

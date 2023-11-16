@@ -18,7 +18,12 @@ export const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "700",
     fontSize: 16,
-    width: "90%",
+    width: "80%",
+  },
+
+  iconsWrapper: {
+    flexDirection: "row",
+    gap: 18,
   },
 
   description: { color: "#8b949e" },

@@ -8,6 +8,7 @@ interface IDreamContext {
   registerDream: (dream: Partial<IDream>) => void;
   updateDream: (dream: IDream) => void;
   toggleFavorite: (id: string) => void;
+  deleteDream: (id: string) => void;
 }
 
 interface IDreamProviderProps {
@@ -20,13 +21,21 @@ export const DreamsContext = React.createContext<IDreamContext>({
   registerDream: (dream: Partial<IDream>) => {},
   updateDream: (dream: IDream) => {},
   toggleFavorite: (id: string) => {},
+  deleteDream: (id: string) => {},
 });
 
 const DreamsProvider = ({ children }: IDreamProviderProps) => {
   const [dreams, setDreams] = useState<Array<IDream>>([]);
   const [favorites, setFavorites] = useState<Array<IDream>>([]);
   const contextValue = useMemo(
-    () => ({ dreams, favorites, registerDream, updateDream, toggleFavorite }),
+    () => ({
+      dreams,
+      favorites,
+      registerDream,
+      updateDream,
+      toggleFavorite,
+      deleteDream,
+    }),
     [dreams, favorites]
   );
 
@@ -70,6 +79,15 @@ const DreamsProvider = ({ children }: IDreamProviderProps) => {
     const favorites = updatedDreams.filter((dream) => dream.favorite);
     setDreams(updatedDreams);
     setFavorites(favorites);
+  }
+
+  function deleteDream(id: string) {
+    const updatedDreams = dreams.filter((dream) => dream.id !== id);
+    const updatedFavoriteDreams = updatedDreams.filter(
+      (dream) => dream.favorite
+    );
+    setDreams(updatedDreams);
+    setFavorites(updatedFavoriteDreams);
   }
 
   return (

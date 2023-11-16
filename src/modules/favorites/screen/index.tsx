@@ -7,12 +7,13 @@ import { DreamsContext } from "../../../context/DreamsContext";
 import { styles } from "./styles";
 
 export const Favorites = () => {
-  const { favorites, toggleFavorite } = useContext(DreamsContext);
+  const { favorites, toggleFavorite, deleteDream } = useContext(DreamsContext);
 
   function isFavoriteDreamsEmpty() {
     if (favorites.length > 0) {
       return favorites.map((dream) => (
         <DreamCard
+          onPressDelete={deleteDream}
           onPressFavorite={toggleFavorite}
           dream={dream}
           key={dream.id}

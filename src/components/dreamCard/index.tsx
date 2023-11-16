@@ -1,4 +1,4 @@
-import { FontAwesome } from "@expo/vector-icons";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 import {
   Text,
   TouchableOpacity,
@@ -7,23 +7,16 @@ import {
 } from "react-native";
 import { IDream } from "../../models/dream";
 import { styles } from "./styles";
-
 interface Props extends TouchableOpacityProps {
   dream: IDream;
   onPressFavorite: (id: string) => void;
+  onPressDelete: (id: string) => void;
 }
 
-export const DreamCard = ({ dream, onPressFavorite }: Props) => {
+export const DreamCard = ({ dream, onPressFavorite, onPressDelete }: Props) => {
   function handleStarIcon() {
     const icon = dream.favorite ? "star" : "star-o";
-    return (
-      <FontAwesome
-        onPress={() => onPressFavorite(dream.id)}
-        name={icon}
-        size={32}
-        color="#fff"
-      />
-    );
+    return <FontAwesome name={icon} size={26} color="#fff" />;
   }
 
   return (
@@ -31,9 +24,20 @@ export const DreamCard = ({ dream, onPressFavorite }: Props) => {
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>{dream.title}</Text>
-          <TouchableOpacity activeOpacity={0.7}>
-            {handleStarIcon()}
-          </TouchableOpacity>
+          <View style={styles.iconsWrapper}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => onPressFavorite(dream.id)}
+            >
+              {handleStarIcon()}
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => onPressDelete(dream.id)}
+            >
+              <Feather name="trash" size={26} color="#fff" />
+            </TouchableOpacity>
+          </View>
         </View>
         <Text style={styles.description}>{dream.description}</Text>
       </View>

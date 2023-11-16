@@ -19,7 +19,8 @@ export const Home = () => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
-  const { dreams, registerDream, toggleFavorite } = useContext(DreamsContext);
+  const { dreams, registerDream, toggleFavorite, deleteDream } =
+    useContext(DreamsContext);
 
   function createDream() {
     const dream: Partial<IDream> = { title, description };
@@ -49,6 +50,7 @@ export const Home = () => {
           onPressFavorite={toggleFavorite}
           dream={dream}
           key={dream.id}
+          onPressDelete={deleteDream}
         />
       ));
     } else {

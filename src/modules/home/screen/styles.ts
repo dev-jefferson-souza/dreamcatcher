@@ -4,13 +4,12 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#010409",
-    padding: 16,
+    paddingHorizontal: 16,
     paddingTop: StatusBar.currentHeight,
-    alignItems: "center",
   },
 
+  content: { alignItems: "center" },
   logo: { margin: 16 },
-
   inputsWrapper: { gap: 24 },
 
   titleWrapper: {

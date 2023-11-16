@@ -1,5 +1,6 @@
-import React, { ReactNode, useMemo, useState } from "react";
+import React, { ReactNode, useEffect, useMemo, useState } from "react";
 import { IDream } from "../models/dream";
+import dreamsService from "../services/dreamsService";
 
 interface IDreamContext {
   dreams: Array<IDream>;
@@ -29,20 +30,33 @@ const DreamsProvider = ({ children }: IDreamProviderProps) => {
     [dreams, favorites]
   );
 
-  function registerDream(dream: Partial<IDream>) {
-    const newDream: IDream = {
-      id: Math.floor(Math.random() * 1000000).toString(),
-      favorite: false,
-      description: dream.description ?? "",
-      title: dream.title ?? "",
-    };
+  useEffect(() => handleStoredValues(), []);
+  useEffect(() => storeValues(), [dreams, favorites]);
 
-    setDreams([...dreams, newDream]);
+  function handleStoredValues() {
+    dreamsService.getDreams().then((res) => setDreams(res));
+    dreamsService.getFavorites().then((res) => setFavorites(res));
   }
 
-  function updateDream(updatedDream: IDream) {
+  function storeValues() {
+    dreamsService.storeDreams(dreams);
+    dreamsService.storeFavorites(favorites);
+  }
+
+  function registerDream(value: Partial<IDream>) {
+    const dream: IDream = {
+      id: Math.floor(Math.random() * 1000000).toString(),
+      favorite: false,
+      description: value.description ?? "",
+      title: value.title ?? "",
+    };
+
+    setDreams([...dreams, dream]);
+  }
+
+  function updateDream(value: IDream) {
     const updatedDreams = dreams.map((dream) =>
-      dream.id === updatedDream.id ? updatedDream : dream
+      value.id === dream.id ? value : dream
     );
     setDreams(updatedDreams);
   }
@@ -52,8 +66,8 @@ const DreamsProvider = ({ children }: IDreamProviderProps) => {
       if (dream.id === id) dream.favorite = !dream.favorite;
       return dream;
     });
-    const favorites = updatedDreams.filter((dream) => dream.favorite);
 
+    const favorites = updatedDreams.filter((dream) => dream.favorite);
     setDreams(updatedDreams);
     setFavorites(favorites);
   }
